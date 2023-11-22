@@ -412,3 +412,10 @@ def complete(request):
         return redirect('my_domicilies')
     else:
         return JsonResponse({'error': 'Método no permitido'})
+
+
+def domicilies_user(request):
+    title = 'Domicilios'
+    user = request.user.id
+    domicilies = Domicilies.objects.filter(user_id=user)
+    return render(request, 'user/domicilies.html', {'title': title, 'domicilies': domicilies})

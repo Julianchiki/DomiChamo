@@ -31,6 +31,7 @@ urlpatterns = [
     path('assign', views.assign, name='assign'),
     path('my_domicilies', views.my_domicilies, name='my_domicilies'),
     path('my_domicilies/complete', views.complete, name='complete'),
+    path('my_domicilies/domicilies_user', views.domicilies_user, name='domicilies_user'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
