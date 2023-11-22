@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="domicilies" style="margin: 20px;">
+    <h2>Asignar Domicilios</h2>
+    <table id="domicilies" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Dirección</th>
+                <th>Estado domicilio</th>
+                <th>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assign">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for assign_domicilie in domicilies %}
+                <tr>
+                    <td>{{ assign_domicilie.user.first_name }} {{ assign_domicilie.user.last_name }}</td>
+                    <td>{{ assign_domicilie.domicilie.addres }}</td>
+                    <td>{{ assign_domicilie.domicilie.state }}</td>
+                    <td>
+                        {% if assign_domicilie.domicilie.state == 'En proceso' %}
+                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#complete{{ assign_domicilie.domicilie.id }}"><i class="fas fa-check"></i></button>
+                        <div class="modal fade" id="complete{{ assign_domicilie.domicilie.id }}" tabindex="-1" aria-labelledby="complete{{ assign_domicilie.domicilie.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="completeLabel">Completar Domicilio</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{% url 'complete' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            {% if assign_domicilie %}
+                                            <input type="hidden" name="domicilie" value="{{ assign_domicilie.domicilie.id }}">
+                                            {% endif %}
+                                            <p>¿Entregaste el domicilio de {{ assign_domicilie.user.first_name }} {{ assign_domicilie.user.last_name }} en la dirección {{ assign_domicilie.domicilie.addres }}?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-success" data-bs-dismiss="modal">Sí</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</div>
+{% endblock %}

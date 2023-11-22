@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" id="edit_measurement_unit{{ unit.id }}" tabindex="-1" aria-labelledby="edit_measurement_unit{{ unit.id }}Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="edit_measurement_unitLabel">Editar Categoria</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'edit_measurement_unit' %}" method="post">
+          {% csrf_token %}
+          <div class="modal-body">
+            {% if unit %}
+            <input type="hidden" name="measurement_unit_id" value="{{ unit.id }}">
+            {% endif %}
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" name="name_measurement" id="name_measurement" value="{{ unit.name }}">
+            <label for="name">Abreciación</label>
+            <input type="text" class="form-control" name="abbreviation" id="abbreviation" value="{{ unit.abbreviation }}">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

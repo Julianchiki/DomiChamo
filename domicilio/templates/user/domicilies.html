@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="domicilies">
+    <h2>Mis Domicilios</h2>
+    <table id="domicilies" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Fecha y Hora</th>
+                <th>Productos pedidos</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for d in domicilies %}
+            <tr>
+                <td>{{d.date_time}}</td>
+                <td>
+                    {% for detail in d.domiciliedetail_set.all %}
+                    {{detail.inventory.element.name}}<br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for detail in d.domiciliedetail_set.all %}
+                        {{ detail.amount }}<br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for detail in d.domiciliedetail_set.all %}
+                        {{detail.subtotal}}<br>
+                    {% endfor %}
+                </td>
+                <td>{{d.total}}</td>
+                <td>{{d.state}}</td>
+                <td>
+                    {% if d.state == 'En proceso' %}
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancel_domicilie{{ d.id }}"><i class="fas fa-times"></i></button>
+                    <div class="modal fade" id="cancel_domicilie{{ d.id }}" tabindex="-1" aria-labelledby="cancel_domicilie{{ d.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="cancel_domicilieLabel">Cancelar Domicilio</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="{% url 'cancel' %}" method="post">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            {% if d %}
+                                            <input type="hidden" name="domicilie" value="{{ d.id }}">
+                                            {% endif %}
+                                            <p>¿Deseas cancelar el domicilio?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                            <button type="submit" class="btn btn-danger" data-bs-dismiss="modal">Sí, cancelar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

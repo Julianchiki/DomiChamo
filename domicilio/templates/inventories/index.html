@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="inventories">
+    <h2>Inventario</h2>
+    <table id="inventories" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Stock</th>
+                <th>Precio</th>
+                <th>Fecha de expiración</th>
+                <th>Lote</th>
+                <th>Marca</th>
+                <th>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_inventory">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in data %}
+            <tr>
+                <td>{{i.element.name}}</td>
+                <td>{{i.description}}</td>
+                <td>{{i.amount}}</td>
+                <td>{{i.stock}}</td>
+                <td>{{i.price}}</td>
+                <td>{{i.expiration_date}}</td>
+                <td>{{i.lot_number}}</td>
+                <td>{{i.mark}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit_inventory{{ i.id }}"><i class="fas fa-edit"></i></button>
+                    {% include "inventories/edit.html" %}
+                    <button type="button" id="delete-inventory" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_inventory{{ i.id }}"><i class="fas fa-trash"></i></button>
+                    {% include "inventories/delete.html" %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!--Modal añadir-->
+{% include "inventories/add.html" %}
+
+{% endblock %}

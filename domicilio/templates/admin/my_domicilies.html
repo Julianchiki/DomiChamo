@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="domicilies" style="margin: 20px;">
+    <h2>Asignar Domicilios</h2>
+    <table id="domicilies" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Domicilio</th>
+                <th>Domiciliario</th>
+                <th>Estado domicilio</th>
+                <th>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#assign">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for assign_domicilie in domicilies %}
+                <tr>
+                    <td>{{ assign_domicilie.domicilie.addres }}</td>
+                    <td>{{ assign_domicilie.user.first_name }} {{ assign_domicilie.user.last_name }}</td>
+                    <td>{{ assign_domicilie.domicilie.state }}</td>
+                    <td></td>  <!-- Agrega aquí cualquier otra información que desees mostrar -->
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+    </table>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="assign" tabindex="-1" aria-labelledby="assignLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="assignLabel">Asignar Domicilios</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'assign' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            {{ form.as_p }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Asignar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

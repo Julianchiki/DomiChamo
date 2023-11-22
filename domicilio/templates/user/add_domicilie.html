@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<form action="{% url 'save_domicilie' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="hidden" name="date_time" value="{{ datetime }}">
+    <div class="total" style="margin: 4px;">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="addres">Dirección</label>
+                <input type="text" class="form-control" name="addres" id="addres">
+            </div>
+            <div class="col-md-3" style="position: relative; top: 32px;">
+                <span id="total"></span>
+                <button type="submit" class="btn btn-success">Pedir</button>
+            </div>
+        </div>
+        <br>
+    </div>
+
+    <div class="container" style="margin: 40px;">
+        <div class="row">
+            {% for i in inventories %}
+            <div class="col">   
+                <div class="card" style="width: 18rem;">
+                    <img src="{{i.element.image.url}}" class="card-img-top" height="150" width="100">
+                    <div class="card-body">
+                        <h5 class="card-title"><strong>{{i.element.name}}</strong></h5>
+                        <p class="card-text"><strong>Disponible:</strong> {{i.amount}} <br> <strong>Precio:</strong> {{i.price}} <br> <strong>Fecha de expidición: </strong>{{i.expiration_date}}</p>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#domicilie{{i.id}}">
+                            <i class="fas fa-plus" style="color: #00ff11;"></i> Pedir
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="domicilie{{ i.id }}" tabindex="-1" aria-labelledby="domicilie{{ i.id }}Label" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="domicilieLabel">Pedir {{i.element.name}}</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        {% if i %}
+                                        <input type="hidden" name="products[]" value="{{ i.id }}">
+                                        {% endif %}
+                                        <label for="amount">Cantidad</label>
+                                        <input type="number" class="form-control" name="amount[]" id="amount">
+                                        <label for="subtotal">Subtotal</label>
+                                        <input type="number" class="form-control" name="subtotal[]" id="subtotal" readonly>
+                                        <input type="hidden" class="form-control" id="price_unit" value="{{ i.price }}">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-success" id="guardar-btn" data-bs-dismiss="modal">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+</form>
+
+<script>
+    const guardarBtns = document.querySelectorAll('#guardar-btn');
+    guardarBtns.forEach(function (button) {
+        button.addEventListener('click', function () {
+            const cardElement = button.closest('.card'); // Get the card element associated with the button
+            const cantidadElement = cardElement.querySelector('#amount'); // Get the amount input element
+            const cantidad = parseInt(cantidadElement.value, 10);
+            const productId = button.dataset.productId; // Get the product ID from the button's data attribute
+
+            // Store the quantity in a variable
+            const quantityToDisplay = cantidad;
+
+            // Create the floating text element
+            const quantityElement = document.createElement('div');
+            quantityElement.classList.add('floating-text');
+            quantityElement.textContent = `Cantidad: ${quantityToDisplay}`;
+
+            // Position the floating text element
+            quantityElement.style.position = 'absolute';
+            quantityElement.style.top = 0;
+            quantityElement.style.right = 0;
+            quantityElement.style.backgroundColor = '#f2f2f2';
+            quantityElement.style.padding = '5px 10px';
+            quantityElement.style.border = '1px solid #ccc';
+            quantityElement.style.borderRadius = '5px';
+            quantityElement.style.zIndex = 1;
+
+            // Append the floating text element to the card
+            cardElement.appendChild(quantityElement);
+        });
+    });
+
+
+    $(document).ready(function() {
+        $('.modal-body').on('input', 'input#amount', function() {
+            updateSubTotalPrice(); // Actualizar el precio total cuando se modifica la cantidad
+        });
+
+        function updateSubTotalPrice() {
+                var isValid = true;
+                $('.modal-body').each(function() {
+                    var priceField = $(this).find('input#price_unit').val();
+                    var price = parseFloat(priceField) || 0;
+                    var amountField = $(this).find('input#amount').val();
+                    var amount = parseFloat(amountField) || 0;
+        
+                    var totalField = $(this).find('input#subtotal');
+                    var subtotal = price * amount;
+                    totalField.val(subtotal);
+
+                });
+                updateTotalPrice(); // Actualiza el campo de Total con el valor calculado
+            }
+
+            function updateTotalPrice() {
+                var totalPrice = 0;
+                $('.modal-body').each(function() {
+                    var totalField = $(this).find('input#subtotal');
+                    var subtotal = parseFloat(totalField.val()) || 0;
+                    totalPrice += subtotal;
+                    console.log(totalPrice);
+                });
+                // Actualiza el campo de Total con el valor calculado
+                $('#total').text('Total: ' + totalPrice);
+            }
+    });
+</script>
+{% endblock %}

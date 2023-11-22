@@ -1,0 +1,17 @@
+#container_measurement_unit{
+    position: relative;
+    top: 20px;
+}
+
+#container_category{
+    position: relative;
+    top: 20px;
+}
+
+.elements{
+    margin: 40px;
+}
+
+.inventories{
+    margin: 40px;
+}

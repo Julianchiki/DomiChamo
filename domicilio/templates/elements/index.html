@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="elements">
+    <h2>Productos</h2>
+    <table id="elements" class="table table-striped" style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Imagen</th>
+                <th>Categoría</th>
+                <th>Unidad de Medida</th>
+                <th>
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_elements">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for element in elements %}
+            <tr>
+                <td>{{element.name}}</td>
+                <td>{{element.description}}</td>
+                {% if element.image %}
+                <td><img src="{{element.image.url}}" height="100"></td>
+                {% else %}
+                <td>Null</td>
+                {% endif %}
+                <td>{{element.category.name}}</td>
+                <td>{{element.measurement_unit.name}}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit_element{{ element.id }}"><i class="fas fa-edit"></i></button>
+                    {% include "elements/edit_element.html" %}
+                    <button type="button" id="delete-element" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_element{{ element.id }}"><i class="fas fa-trash"></i></button>
+                    {% include "elements/delete_elements.html" %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!--Modal añadir-->
+{% include "elements/add_elements.html" %}
+
+{% endblock %}

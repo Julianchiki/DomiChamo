@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container" id="container_measurement_unit">
+    <h2>Unidades de Medida</h2>
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="table-responsive">
+                <table id="measurement_unit" class="table table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Abreviación</th>
+                            <th>
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add_measurement_unit">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for unit in measurement_units %}
+                        <tr>
+                            <td>{{ unit.name }}</td>
+                            <td>{{ unit.abbreviation }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit_measurement_unit{{ unit.id }}"><i class="fas fa-edit"></i></button>
+                                {% include "parameters/measurement_unit/edit_measurement_unit.html" %}
+                                <button type="button" id="delete-measurement-unit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_measurement_unit{{ unit.id }}"><i class="fas fa-trash"></i></button>
+                                {% include "parameters/measurement_unit/delete_measurement_unit.html" %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal añadir unidades de medida -->
+{% include "parameters/measurement_unit/add_measurement_unit.html" %}
+{% endblock %}

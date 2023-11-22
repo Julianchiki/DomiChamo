@@ -1,0 +1,30 @@
+<!-- Modal -->
+<div class="modal fade" id="add_inventory" tabindex="-1" aria-labelledby="add_inventoryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="add_inventoryLabel">Agregar Producto al Inventario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'add_inventories' %}" method="post">
+          {% csrf_token %}
+          <div class="modal-body">
+            <label for="productos">Productos</label>
+            {{form.element_id}}
+            {% for campo in formulario %}
+            <label>{{campo.label}}</label>
+            {% if campo.name == 'expiration_date' %}
+            <input type="date" class="form-control" name="{{ campo.name }}">
+            {% else %}
+            <input type="{{ campo.field.widget.input_type }}" class="form-control" name="{{ campo.name }}">
+            {% endif %}
+            {% endfor %}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Añadir</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

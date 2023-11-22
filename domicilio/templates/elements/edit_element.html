@@ -1,0 +1,53 @@
+<!-- Modal -->
+<div class="modal fade" id="edit_element{{ element.id }}" tabindex="-1" aria-labelledby="edit_element{{ element.id }}Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="edit_elementLabel">Editar Producto</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'edit_elements' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            {% if element %}
+            <input type="hidden" name="element_id" value="{{ element.id }}">
+            {% endif %}
+            <label for="name">Nombre</label>
+            <input type="text" class="form-control" name="name" id="name" value="{{ element.name }}">
+            <label for="name">Descripción</label>
+            <input type="text" class="form-control" name="description" id="description" value="{{ element.description }}">
+            {% for imagen in formularioEdit %}
+            <label for="name">{{imagen.label}}</label>
+            <input type="{{imagen.field.widget.input_type}}" class="form-control" name="{{imagen.name}}" id="imagen">
+            {% endfor %}
+            {% if element.imagen %}
+            <img src="{{MEDIA_URL}}/images/{{element.imagen}}" width="100">
+            {% endif %}
+            <br>
+            <label for="name">Categoria</label>
+            <select class="form-control" name="category_id" id="category_id">
+                <option value="{{ element.category.id }}">{{ element.category }}</option>
+                {% for category in categories %}
+                    {% if category.id != element.category.id %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <label for="name">Unidad de Medida</label>
+            <select class="form-control" name="measurement_unit_id" id="measurement_unit_id">
+                <option value="{{ element.measurement_unit.id }}">{{ element.measurement_unit }}</option>
+                {% for unit in measurement_units %}
+                    {% if unit.id != element.measurement_unit.id %}
+                        <option value="{{ unit.id }}">{{ unit.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

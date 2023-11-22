@@ -1,0 +1,46 @@
+<!-- Modal -->
+<div class="modal fade" id="edit_inventory{{ i.id }}" tabindex="-1" aria-labelledby="edit_inventory{{ i.id }}Label" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="edit_inventoryLabel">Editar Inventario</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'edit_inventories' %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="modal-body">
+            {% if i %}
+            <input type="hidden" name="inventory_id" value="{{ i.id }}">
+            {% endif %}
+            <label for="name">Producto</label>
+            <select class="form-control" name="element_select" id="element_select">
+                <option value="{{ i.element.id }}">{{ i.element.name }}</option>
+                {% for element in elements %}
+                    {% if element.id != i.element.id %}
+                        <option value="{{ element.id }}">{{ element.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+            <label for="name">Descripción</label>
+            <input type="text" class="form-control" name="description" id="description" value="{{ i.description }}">
+            <label for="name">Cantidad</label>
+            <input type="number" class="form-control" name="amount" id="amount" value="{{ i.amount }}">
+            <label for="name">Stock</label>
+            <input type="number" class="form-control" name="stock" id="stock" value="{{ i.stock }}">
+            <label for="name">Precio de Venta</label>
+            <input type="number" class="form-control" name="price" id="price" value="{{ i.price }}">
+            <label for="name">Fecha de Expiración</label>
+            <input type="date" class="form-control" name="expiration_date" value="{{i.expiration_date|date:'Y-m-d'}}">
+            <label for="name">Lote</label>
+            <input type="number" class="form-control" name="lot_number" id="lot_number" value="{{ i.lot_number }}">
+            <label for="name">Marca</label>
+            <input type="text" class="form-control" name="mark" id="mark" value="{{ i.mark }}">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>

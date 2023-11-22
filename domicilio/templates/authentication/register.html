@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarme</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
+
+</head>
+<body>
+    <div id="error-message" style="display: none;">{{ error }}</div>
+    <div class="register">
+        <h1>Registro de Usuario</h1>
+        <form action="{% url 'register' %}" method="post">
+            {% csrf_token %}
+            <label for="username">Nombre de usuario</label>
+            <input type="text" name="username" required>
+
+            <label for="first_name">Nombres</label>
+            <input type="text" name="first_name" required>
+
+            <label for="last_name">Apellidos</label>
+            <input type="text" name="last_name" required>
+
+            <label for="password">Contraseña</label>
+            <input type="password" name="password1" required>
+
+            <label for="password">Confirmar Contraseña</label>
+            <input type="password" name="password2" required>
+
+            <label for="email">Correo electrónico</label>
+            <input type="email" name="email" required>
+
+            <button type="submit">Registrarse</button>
+            <a style="text-decoration: none; color: #dc3545;" href="{% url 'login' %}">Ya tengo un usuario!</a>
+        </form>
+    </div>
+    {% include "../partials/scripts.html" %}
+</body>
+</html>

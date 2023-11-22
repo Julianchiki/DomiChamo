@@ -1,0 +1,99 @@
+  <!-- Navbar -->
+  {% load static %}
+  <nav class="navbar navbar-expand navbar-danger navbar-light">
+
+    <a style="text-decoration: none; font-weight: bold;" href="#" class="brand-link">
+      <svg style="position: relative; left:15px" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 640 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#000000}</style><path d="M624 352h-16V243.9c0-12.7-5.1-24.9-14.1-33.9L494 110.1c-9-9-21.2-14.1-33.9-14.1H416V48c0-26.5-21.5-48-48-48H112C85.5 0 64 21.5 64 48v48H8c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h272c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H40c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h208c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H8c-4.4 0-8 3.6-8 8v16c0 4.4 3.6 8 8 8h208c4.4 0 8 3.6 8 8v16c0 4.4-3.6 8-8 8H64v128c0 53 43 96 96 96s96-43 96-96h128c0 53 43 96 96 96s96-43 96-96h48c8.8 0 16-7.2 16-16v-32c0-8.8-7.2-16-16-16zM160 464c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm320 0c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-208H416V144h44.1l99.9 99.9V256z"/></svg>
+      <span style="position: relative; left:15px; color: #000;" class="brand-text font-black-light">DomiChamo</span>
+    </a>
+
+    <!-- Left navbar links -->
+    <ul class="navbar-nav" style="position: relative; left: 40px; top: 10px;">
+      {% for group in user.groups.all %}
+      {% if group.name == 'Administrador' %}
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#" style="color: #fff; font-weight: bold;">
+          <i class="nav-icon fas fa-stream"></i>
+          <p>
+            Parámetros
+          </p>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <a href="{% url 'categories' %}" class="dropdown-item">
+            <i class="fas fa-shapes"></i> Categorías
+          </a>
+          <a href="{% url 'measurement_units' %}" class="dropdown-item">
+            <i class="fas fa-ruler-horizontal"></i> Unidades de medida
+          </a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'elements.index' %}" class="nav-link" style="color: #fff; font-weight: bold;">
+          <i class="nav-icon fas fa-apple-alt"></i>
+          <p>
+            Productos
+          </p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'inventories.index' %}" class="nav-link" style="color: #fff; font-weight: bold;">
+          <i class="nav-icon fas fa-warehouse"></i>
+          <p>
+            Inventario
+          </p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{% url 'assign_domicilies' %}" class="nav-link" style="color: #fff; font-weight: bold;">
+          <i class="fas fa-tasks"></i>
+          <p>
+            Asignar Domicilios
+          </p>
+        </a>
+      </li>
+      {% elif group.name == 'Domiciliario' %}
+      <li class="nav-item">
+        <a href="{% url 'my_domicilies' %}" class="nav-link" style="color: #fff; font-weight: bold;">
+          <i class="fas fa-tasks"></i>
+          <p>
+            Mis Domicilios
+          </p>
+        </a>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" style="color: #fff; font-weight: bold;" href="{% url 'domicilie' %}">
+          <i class="fas fa-map-marker-alt"></i>
+          <p>Pedir domicilio</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color: #fff; font-weight: bold;" href="{% url 'my_domicilies' %}">
+          <i class="fas fa-shopping-bag"></i>
+          <p>Mis Domicilios</p>
+        </a>
+      </li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#" style="color: #fff; font-weight: bold; position: relative; right: 15px;">
+          {% if user.is_authenticated %}
+            {% for group in user.groups.all %}
+            Usuario: {{user.username}} -
+            Rol: {{ group.name }}
+            {% endfor %}
+          {% endif %}
+        </a>
+      </li>
+      
+      <li class="nav-item">
+        {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" class="d-block" style="color: #fff; font-weight: bold; position: relative; top: 8px; right: 8px;"><i class="fas fa-sign-out-alt"></i></a>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
